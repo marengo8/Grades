@@ -1,0 +1,146 @@
+---
+title: "Grades.Marechal"
+format: html
+editor: visual
+---
+
+# Initialisation
+
+```{r}
+here::i_am("Grades.Marechal.Rproj")
+library(here)
+library(vroom)
+library(ggplot2)
+library(tidyr)
+library(stringr)
+library(dplyr)
+theme_set(theme_bw())
+```
+
+## Question 1
+
+```{r}
+grades <-vroom(here("grades05.csv"))
+print(grades)
+```
+
+## Question 2
+
+```{r}
+  grades |>
+  filter(!is.na(grade)) |>
+  nrow()
+```
+### bis
+```{r}
+num_grades <- 
+  grades |>
+  filter(!is.na(grade)) |>
+  nrow()
+```
+
+Le jeu de données contient `r num_grades` notes.
+
+
+
+## Question 3
+
+```{r}
+grades |>
+  distinct(id) |>
+  nrow()
+```
+
+### bis
+```{r}
+nombresd_etu <- grades |>
+  distinct(id) |>
+  nrow()
+```
+Le jeu de données contient `r nombres_etu` etudiants.
+
+
+
+## Question 4
+```{r}
+long_grades <- 
+  grades |>
+  pivot_longer(-c(id, group))
+#long_grades %>% slice(1:5)
+```
+
+## Question 5
+```{r}
+grades |>
+  group_by(group) |>
+  summarise(n = n())
+```
+
+### bis
+```{r}
+student_counts <- grades |>
+  group_by(group) |>
+  summarise(n = n())
+
+ggplot(student_counts, aes(x = group, y = n, fill = group)) +
+  geom_bar(stat = "identity")
+```
+## Question 6
+```{r}
+grades |>
+  filter(course == 'Mechanical Engineering and Vehicle Repair') |>
+  group_by(group) |>
+  summarise(mean_grade = mean(grade, na.rm = TRUE))
+```
+### bis
+```{r}
+av_gad <- grades |>
+  filter(course == 'Mechanical Engineering and Vehicle Repair') |>
+  group_by(group) |>
+  summarise(mean_grade = mean(grade, na.rm = TRUE))
+
+ggplot(av_gad, aes(x = group, y = mean_grade, fill = group)) +
+  geom_col()
+```
+## Question 7
+###passe
+
+
+## Quest 8
+
+```{r}
+grades |>
+  select(id, group, grade) |>
+  group_by(id, group) |>
+  summarise(
+    count = n(),                        # Compte le nombre de notes
+    mean_grade = mean(grade, na.rm = TRUE),  # Calcule la moyenne
+    max_grade = max(grade, na.rm = TRUE),    # Calcule la note maximum
+    min_grade = min(grade, na.rm = TRUE),    # Calcule la note minimum
+    median_grade = median(grade, na.rm = TRUE), # Calcule la médiane
+    .groups = 'drop'
+  )
+
+```
+## Quest 9
+```{r}
+grades |>
+  select(id, group, grade, course) |>
+  filter(course == 'Radiation Ecology and Environmental Science') |>
+  group_by(id, group) |>
+  summarise(count = n()) |>
+  slice_head(n = 5)
+
+
+```
+
+## Quest 10
+### Echecs
+
+## Quest 11
+### Echec
+
+### Quest 12
+
+```
+
